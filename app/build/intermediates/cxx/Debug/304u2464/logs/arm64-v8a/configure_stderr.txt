@@ -1,22 +1,13 @@
-CMake Error at C:/Users/seperez1/AppData/Local/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeTestCCompiler.cmake:69 (message):
-  The C compiler
+CMake Error at CMakeLists.txt:8 (find_package):
+  Could not find a package configuration file provided by "oboe" with any of
+  the following names:
 
-    "C:/Users/seperez1/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe"
+    oboeConfig.cmake
+    oboe-config.cmake
 
-  is not able to compile a simple test program.
-
-  It fails with the following output:
-
-    Change Dir: C:/Users/seperez1/Downloads/BeatLooper_v4_fixed/BeatLooper/app/.cxx/Debug/304u2464/arm64-v8a/CMakeFiles/CMakeTmp
-    
-    Run Build Command(s):C:\Users\seperez1\AppData\Local\Android\Sdk\cmake\3.22.1\bin\ninja.exe cmTC_6ca62 && ninja: error: unknown target 'cmTC_6ca62'
-    
-    
-
-  
-
-  CMake will not be able to correctly generate this project.
-Call Stack (most recent call first):
-  CMakeLists.txt:2 (project)
+  Add the installation prefix of "oboe" to CMAKE_PREFIX_PATH or set
+  "oboe_DIR" to a directory containing one of the above files.  If "oboe"
+  provides a separate development package or SDK, be sure it has been
+  installed.
 
 

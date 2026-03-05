@@ -8,10 +8,6 @@
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
 AudioEngine::AudioEngine()  {}
 AudioEngine::~AudioEngine() { stop(); }
 
@@ -25,7 +21,7 @@ bool AudioEngine::start() {
            ->setFormat(oboe::AudioFormat::Float)
            ->setChannelCount(oboe::ChannelCount::Stereo)
            ->setSampleRate(SAMPLE_RATE)
-           ->setDataCallback(this);
+           ->setCallback(this);
 
     oboe::Result result = builder.openManagedStream(mStream);
     if (result != oboe::Result::OK) {

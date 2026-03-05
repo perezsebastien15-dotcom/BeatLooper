@@ -22,7 +22,7 @@
       "abi": "arm64-v8a",
       "output": "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\build\\intermediates\\cxx\\Debug\\2qh3ol2v\\obj\\arm64-v8a\\libbeatlooper.so",
       "runtimeFiles": [
-        "C:\\Users\\seperez1\\.gradle\\caches\\transforms-3\\8ea5b5a13cb34a46b429b09026a3ae16\\transformed\\oboe-1.10.0\\prefab\\modules\\oboe\\libs\\android.arm64-v8a\\liboboe.so"
+        "C:\\Users\\seperez1\\.gradle\\caches\\transforms-3\\775df61766df2c234b1fd2f46c7246e5\\transformed\\oboe-1.8.0\\prefab\\modules\\oboe\\libs\\android.arm64-v8a\\liboboe.so"
       ]
     }
   }

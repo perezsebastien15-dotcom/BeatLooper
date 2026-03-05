@@ -12,7 +12,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.ui.input.pointer.awaitPointerEventScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
@@ -165,6 +164,7 @@ fun AppHeader(currentBeat: Long) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+        @OptIn(ExperimentalMaterial3Api::class)
         Text(
             "BeatLooper",
             color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold,
@@ -335,6 +335,7 @@ fun BpmInputDialog(currentBpm: Double, onConfirm: (Double) -> Unit, onDismiss: (
         shape = RoundedCornerShape(14.dp),
         title = { Text("Saisir le BPM", color = Color.White, fontFamily = FontFamily.Monospace, fontSize = 15.sp) },
         text = {
+            @OptIn(ExperimentalMaterial3Api::class)
             OutlinedTextField(
                 value = text, onValueChange = { text = it.filter { c -> c.isDigit() || c == '.' } },
                 label = { Text("BPM (40–300)") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -459,7 +460,7 @@ fun PadButton(
                 var startSpeed = pad.speed; var startPitch = pad.pitch
                 var gestureLocked = false
 
-                awaitPointerEventScope {
+                this.awaitPointerEventScope {
                     while (true) {
                         val down = awaitFirstDown(requireUnconsumed = false)
                         startX = down.position.x; startY = down.position.y
@@ -564,6 +565,7 @@ fun PadBadge(text: String, color: Color) {
             .background(color.copy(alpha = 0.25f))
             .padding(horizontal = 3.dp, vertical = 1.dp)
     ) {
+        @OptIn(ExperimentalMaterial3Api::class)
         Text(text, color = color, fontSize = 7.sp, fontFamily = FontFamily.Monospace,
             fontWeight = FontWeight.Bold)
     }
@@ -605,6 +607,7 @@ fun StudioBtn(text: String, bg: Color, modifier: Modifier = Modifier, enabled: B
             .pointerInput(enabled) { if (enabled) detectTapGestures(onTap = { onClick() }) }
             .padding(vertical = 10.dp, horizontal = 4.dp)
     ) {
+        @OptIn(ExperimentalMaterial3Api::class)
         Text(text, color = Color.White.copy(alpha = a), fontSize = 10.sp,
             fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center, letterSpacing = 0.4.sp, maxLines = 1)
@@ -634,6 +637,7 @@ fun PadConfigSheet(
         title = {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(Modifier.size(13.dp).clip(CircleShape).background(pad.color))
+                @OptIn(ExperimentalMaterial3Api::class)
                 Text("Configurer  ${pad.label}", color = Color.White,
                     fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.Bold)
             }
@@ -643,6 +647,7 @@ fun PadConfigSheet(
 
                 // ── Sons préchargés ──────────────────────────────────────────
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    @OptIn(ExperimentalMaterial3Api::class)
                     Text("SONS PRÉCHARGÉS", color = DIM, fontSize = 9.sp,
                         fontFamily = FontFamily.Monospace, letterSpacing = 1.sp)
                     presets.chunked(2).forEach { row ->
@@ -658,6 +663,7 @@ fun PadConfigSheet(
                                         .pointerInput(Unit) { detectTapGestures(onTap = { onDismiss() }) }
                                         .padding(vertical = 8.dp)
                                 ) {
+                                    @OptIn(ExperimentalMaterial3Api::class)
                                     Text("🎵  $label", color = LIGHT, fontSize = 11.sp,
                                         fontFamily = FontFamily.Monospace)
                                 }
@@ -666,7 +672,7 @@ fun PadConfigSheet(
                     }
                 }
 
-                HorizontalDivider(color = BORDER)
+                Divider(color = BORDER)
 
                 // ── Vitesse ──────────────────────────────────────────────────
                 // Indépendant du pitch — time-stretching via phase vocoder
@@ -676,9 +682,11 @@ fun PadConfigSheet(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        @OptIn(ExperimentalMaterial3Api::class)
                         Text("VITESSE", color = DIM, fontSize = 9.sp,
                             fontFamily = FontFamily.Monospace, letterSpacing = 1.sp)
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            @OptIn(ExperimentalMaterial3Api::class)
                             Text(
                                 "×${"%.2f".format(pad.speed)}",
                                 color = CYAN, fontSize = 12.sp, fontFamily = FontFamily.Monospace,
@@ -694,6 +702,7 @@ fun PadConfigSheet(
                                         .pointerInput(Unit) { detectTapGestures(onTap = { onSetSpeed(1.0f) }) }
                                         .padding(horizontal = 6.dp, vertical = 3.dp)
                                 ) {
+                                    @OptIn(ExperimentalMaterial3Api::class)
                                     Text("RESET", color = DIM, fontSize = 8.sp,
                                         fontFamily = FontFamily.Monospace)
                                 }
@@ -718,12 +727,13 @@ fun PadConfigSheet(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         listOf("×0.25", "×0.5", "×1", "×2", "×4").forEach { label ->
+                            @OptIn(ExperimentalMaterial3Api::class)
                             Text(label, color = DIM, fontSize = 8.sp, fontFamily = FontFamily.Monospace)
                         }
                     }
                 }
 
-                HorizontalDivider(color = BORDER)
+                Divider(color = BORDER)
 
                 // ── Pitch ────────────────────────────────────────────────────
                 // Indépendant de la vitesse — pitch-shifting via phase vocoder
@@ -733,9 +743,11 @@ fun PadConfigSheet(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        @OptIn(ExperimentalMaterial3Api::class)
                         Text("PITCH", color = DIM, fontSize = 9.sp,
                             fontFamily = FontFamily.Monospace, letterSpacing = 1.sp)
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            @OptIn(ExperimentalMaterial3Api::class)
                             Text(
                                 "${if (pad.pitch >= 0) "+" else ""}${"%.1f".format(pad.pitch)} st",
                                 color = Color(0xFF00E676), fontSize = 12.sp,
@@ -751,6 +763,7 @@ fun PadConfigSheet(
                                         .pointerInput(Unit) { detectTapGestures(onTap = { onSetPitch(0.0f) }) }
                                         .padding(horizontal = 6.dp, vertical = 3.dp)
                                 ) {
+                                    @OptIn(ExperimentalMaterial3Api::class)
                                     Text("RESET", color = DIM, fontSize = 8.sp,
                                         fontFamily = FontFamily.Monospace)
                                 }
@@ -761,7 +774,7 @@ fun PadConfigSheet(
                         value = pad.pitch,
                         onValueChange = { onSetPitch(it) },
                         valueRange = -24f..24f,
-                        steps = 47, // 48 demi-tons = 47 steps pour snap sur chaque demi-ton
+                        steps = 47, // 48 demi-tons = 47 steps pour snap on each semitone
                         modifier = Modifier.fillMaxWidth().height(24.dp),
                         colors = SliderDefaults.colors(
                             thumbColor = Color(0xFF00E676),
@@ -774,15 +787,17 @@ fun PadConfigSheet(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         listOf("−24", "−12", "0", "+12", "+24").forEach { label ->
+                            @OptIn(ExperimentalMaterial3Api::class)
                             Text(label, color = DIM, fontSize = 8.sp, fontFamily = FontFamily.Monospace)
                         }
                     }
                 }
 
-                HorizontalDivider(color = BORDER)
+                Divider(color = BORDER)
 
                 // ── Micro ────────────────────────────────────────────────────
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    @OptIn(ExperimentalMaterial3Api::class)
                     Text("MICRO", color = DIM, fontSize = 9.sp,
                         fontFamily = FontFamily.Monospace, letterSpacing = 1.sp)
                     Box(
@@ -797,6 +812,7 @@ fun PadConfigSheet(
                             }
                             .padding(vertical = 10.dp)
                     ) {
+                        @OptIn(ExperimentalMaterial3Api::class)
                         Text(
                             text = if (isRecordingMic) "⏹  ARRÊTER" else "🎙  ENREGISTRER VIA MICRO",
                             color = if (isRecordingMic) RED_BG else LIGHT,
@@ -805,7 +821,7 @@ fun PadConfigSheet(
                     }
                 }
 
-                HorizontalDivider(color = BORDER)
+                Divider(color = BORDER)
 
                 // ── Mode boucle ──────────────────────────────────────────────
                 Row(
@@ -813,6 +829,7 @@ fun PadConfigSheet(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    @OptIn(ExperimentalMaterial3Api::class)
                     Text("MODE BOUCLE", color = LIGHT, fontSize = 11.sp, fontFamily = FontFamily.Monospace)
                     StudioSwitch(checked = pad.isLooping, onToggle = onToggleLoop)
                 }
@@ -828,6 +845,7 @@ fun PadConfigSheet(
                     .pointerInput(Unit) { detectTapGestures(onTap = { onDismiss() }) }
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
+                @OptIn(ExperimentalMaterial3Api::class)
                 Text("FERMER", color = MED, fontSize = 11.sp,
                     fontFamily = FontFamily.Monospace, letterSpacing = 1.sp)
             }
