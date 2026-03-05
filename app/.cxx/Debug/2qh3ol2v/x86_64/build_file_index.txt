@@ -1,0 +1,1 @@
+C:\Users\seperez1\Downloads\BeatLooper_v4_fixed\BeatLooper\app\src\main\cpp\CMakeLists.txt

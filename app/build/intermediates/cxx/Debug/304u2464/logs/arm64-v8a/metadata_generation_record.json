@@ -1,0 +1,119 @@
+[
+  {
+    "level_": 0,
+    "message_": "Start JSON generation. Platform version: 27 min SDK version: arm64-v8a",
+    "file_": "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\src\\main\\cpp\\CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "rebuilding JSON C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\.cxx\\Debug\\304u2464\\arm64-v8a\\android_gradle_build.json due to:",
+    "file_": "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\src\\main\\cpp\\CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "- no fingerprint file, will remove stale configuration folder",
+    "file_": "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\src\\main\\cpp\\CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "removing stale contents from \u0027C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\.cxx\\Debug\\304u2464\\arm64-v8a\u0027",
+    "file_": "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\src\\main\\cpp\\CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "created folder \u0027C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\.cxx\\Debug\\304u2464\\arm64-v8a\u0027",
+    "file_": "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\src\\main\\cpp\\CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "executing cmake @echo off\n\"C:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmake\\\\3.22.1\\\\bin\\\\cmake.exe\" ^\n  \"-HC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\src\\\\main\\\\cpp\" ^\n  \"-DCMAKE_SYSTEM_NAME\u003dAndroid\" ^\n  \"-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\" ^\n  \"-DCMAKE_SYSTEM_VERSION\u003d27\" ^\n  \"-DANDROID_PLATFORM\u003dandroid-27\" ^\n  \"-DANDROID_ABI\u003darm64-v8a\" ^\n  \"-DCMAKE_ANDROID_ARCH_ABI\u003darm64-v8a\" ^\n  \"-DANDROID_NDK\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\25.1.8937393\" ^\n  \"-DCMAKE_ANDROID_NDK\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\25.1.8937393\" ^\n  \"-DCMAKE_TOOLCHAIN_FILE\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\25.1.8937393\\\\build\\\\cmake\\\\android.toolchain.cmake\" ^\n  \"-DCMAKE_MAKE_PROGRAM\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmake\\\\3.22.1\\\\bin\\\\ninja.exe\" ^\n  \"-DCMAKE_CXX_FLAGS\u003d-std\u003dc++17\" ^\n  \"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003dC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\build\\\\intermediates\\\\cxx\\\\Debug\\\\304u2464\\\\obj\\\\arm64-v8a\" ^\n  \"-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003dC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\build\\\\intermediates\\\\cxx\\\\Debug\\\\304u2464\\\\obj\\\\arm64-v8a\" ^\n  \"-DCMAKE_BUILD_TYPE\u003dDebug\" ^\n  \"-BC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\.cxx\\\\Debug\\\\304u2464\\\\arm64-v8a\" ^\n  -GNinja ^\n  \"-DANDROID_STL\u003dc++_shared\"\n",
+    "file_": "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\src\\main\\cpp\\CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "@echo off\n\"C:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmake\\\\3.22.1\\\\bin\\\\cmake.exe\" ^\n  \"-HC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\src\\\\main\\\\cpp\" ^\n  \"-DCMAKE_SYSTEM_NAME\u003dAndroid\" ^\n  \"-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\" ^\n  \"-DCMAKE_SYSTEM_VERSION\u003d27\" ^\n  \"-DANDROID_PLATFORM\u003dandroid-27\" ^\n  \"-DANDROID_ABI\u003darm64-v8a\" ^\n  \"-DCMAKE_ANDROID_ARCH_ABI\u003darm64-v8a\" ^\n  \"-DANDROID_NDK\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\25.1.8937393\" ^\n  \"-DCMAKE_ANDROID_NDK\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\25.1.8937393\" ^\n  \"-DCMAKE_TOOLCHAIN_FILE\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\25.1.8937393\\\\build\\\\cmake\\\\android.toolchain.cmake\" ^\n  \"-DCMAKE_MAKE_PROGRAM\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmake\\\\3.22.1\\\\bin\\\\ninja.exe\" ^\n  \"-DCMAKE_CXX_FLAGS\u003d-std\u003dc++17\" ^\n  \"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003dC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\build\\\\intermediates\\\\cxx\\\\Debug\\\\304u2464\\\\obj\\\\arm64-v8a\" ^\n  \"-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003dC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\build\\\\intermediates\\\\cxx\\\\Debug\\\\304u2464\\\\obj\\\\arm64-v8a\" ^\n  \"-DCMAKE_BUILD_TYPE\u003dDebug\" ^\n  \"-BC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\.cxx\\\\Debug\\\\304u2464\\\\arm64-v8a\" ^\n  -GNinja ^\n  \"-DANDROID_STL\u003dc++_shared\"\n",
+    "file_": "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\src\\main\\cpp\\CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "Received process result: 1",
+    "file_": "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\src\\main\\cpp\\CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "JSON generation completed with problem. Exception: com.android.ide.common.process.ProcessException: -- The C compiler identification is Clang 14.0.6\n-- The CXX compiler identification is Clang 14.0.6\n-- Detecting C compiler ABI info\n-- Detecting C compiler ABI info - failed\n-- Check for working C compiler: C:/Users/seperez1/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe\n-- Check for working C compiler: C:/Users/seperez1/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe - broken\n-- Configuring incomplete, errors occurred!\nSee also \"C:/Users/seperez1/Downloads/BeatLooper_v4_fixed/BeatLooper/app/.cxx/Debug/304u2464/arm64-v8a/CMakeFiles/CMakeOutput.log\".\nSee also \"C:/Users/seperez1/Downloads/BeatLooper_v4_fixed/BeatLooper/app/.cxx/Debug/304u2464/arm64-v8a/CMakeFiles/CMakeError.log\".\n\nC++ build system [configure] failed while executing:\n    @echo off\n    \"C:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmake\\\\3.22.1\\\\bin\\\\cmake.exe\" ^\n      \"-HC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\src\\\\main\\\\cpp\" ^\n      \"-DCMAKE_SYSTEM_NAME\u003dAndroid\" ^\n      \"-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\" ^\n      \"-DCMAKE_SYSTEM_VERSION\u003d27\" ^\n      \"-DANDROID_PLATFORM\u003dandroid-27\" ^\n      \"-DANDROID_ABI\u003darm64-v8a\" ^\n      \"-DCMAKE_ANDROID_ARCH_ABI\u003darm64-v8a\" ^\n      \"-DANDROID_NDK\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\25.1.8937393\" ^\n      \"-DCMAKE_ANDROID_NDK\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\25.1.8937393\" ^\n      \"-DCMAKE_TOOLCHAIN_FILE\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\25.1.8937393\\\\build\\\\cmake\\\\android.toolchain.cmake\" ^\n      \"-DCMAKE_MAKE_PROGRAM\u003dC:\\\\Users\\\\seperez1\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmake\\\\3.22.1\\\\bin\\\\ninja.exe\" ^\n      \"-DCMAKE_CXX_FLAGS\u003d-std\u003dc++17\" ^\n      \"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003dC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\build\\\\intermediates\\\\cxx\\\\Debug\\\\304u2464\\\\obj\\\\arm64-v8a\" ^\n      \"-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003dC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\build\\\\intermediates\\\\cxx\\\\Debug\\\\304u2464\\\\obj\\\\arm64-v8a\" ^\n      \"-DCMAKE_BUILD_TYPE\u003dDebug\" ^\n      \"-BC:\\\\Users\\\\seperez1\\\\Downloads\\\\BeatLooper_v4_fixed\\\\BeatLooper\\\\app\\\\.cxx\\\\Debug\\\\304u2464\\\\arm64-v8a\" ^\n      -GNinja ^\n      \"-DANDROID_STL\u003dc++_shared\"\n  from C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\nCMake Error at C:/Users/seperez1/AppData/Local/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeTestCCompiler.cmake:69 (message):\n  The C compiler\n\n    \"C:/Users/seperez1/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe\"\n\n  is not able to compile a simple test program.\n\n  It fails with the following output:\n\n    Change Dir: C:/Users/seperez1/Downloads/BeatLooper_v4_fixed/BeatLooper/app/.cxx/Debug/304u2464/arm64-v8a/CMakeFiles/CMakeTmp\n    \n    Run Build Command(s):C:\\Users\\seperez1\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe cmTC_6ca62 \u0026\u0026 ninja: error: unknown target \u0027cmTC_6ca62\u0027\r\n    \n    \n\n  \n\n  CMake will not be able to correctly generate this project.\nCall Stack (most recent call first):\n  CMakeLists.txt:2 (project)",
+    "file_": "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\src\\main\\cpp\\CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  }
+]

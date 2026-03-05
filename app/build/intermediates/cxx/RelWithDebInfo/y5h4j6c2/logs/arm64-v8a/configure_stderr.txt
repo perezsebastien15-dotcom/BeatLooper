@@ -1,0 +1,13 @@
+CMake Error at CMakeLists.txt:8 (find_package):
+  Could not find a package configuration file provided by "oboe" with any of
+  the following names:
+
+    oboeConfig.cmake
+    oboe-config.cmake
+
+  Add the installation prefix of "oboe" to CMAKE_PREFIX_PATH or set
+  "oboe_DIR" to a directory containing one of the above files.  If "oboe"
+  provides a separate development package or SDK, be sure it has been
+  installed.
+
+

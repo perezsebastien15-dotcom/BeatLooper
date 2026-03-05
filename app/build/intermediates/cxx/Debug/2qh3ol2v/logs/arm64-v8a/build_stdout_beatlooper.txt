@@ -1,0 +1,13 @@
+ninja: Entering directory `C:\Users\seperez1\Downloads\BeatLooper_v4_fixed\BeatLooper\app\.cxx\Debug\2qh3ol2v\arm64-v8a'
+[1/3] Building CXX object CMakeFiles/beatlooper.dir/AudioEngine.cpp.o
+FAILED: CMakeFiles/beatlooper.dir/AudioEngine.cpp.o 
+C:\Users\seperez1\AppData\Local\Android\Sdk\ndk\25.1.8937393\toolchains\llvm\prebuilt\windows-x86_64\bin\clang++.exe --target=aarch64-none-linux-android27 --sysroot=C:/Users/seperez1/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dbeatlooper_EXPORTS -IC:/Users/seperez1/Downloads/BeatLooper_v4_fixed/BeatLooper/app/src/main/cpp -isystem C:/Users/seperez1/.gradle/caches/transforms-3/8ea5b5a13cb34a46b429b09026a3ae16/transformed/oboe-1.10.0/prefab/modules/oboe/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -std=c++17 -fno-limit-debug-info  -fPIC -O3 -ffast-math -Wall -MD -MT CMakeFiles/beatlooper.dir/AudioEngine.cpp.o -MF CMakeFiles\beatlooper.dir\AudioEngine.cpp.o.d -o CMakeFiles/beatlooper.dir/AudioEngine.cpp.o -c C:/Users/seperez1/Downloads/BeatLooper_v4_fixed/BeatLooper/app/src/main/cpp/AudioEngine.cpp
+C:/Users/seperez1/Downloads/BeatLooper_v4_fixed/BeatLooper/app/src/main/cpp/AudioEngine.cpp:24:26: error: cannot initialize a parameter of type 'oboe::AudioStreamCallback *' with an rvalue of type 'AudioEngine *'
+           ->setCallback(this);
+                         ^~~~
+C:/Users/seperez1/.gradle/caches/transforms-3/8ea5b5a13cb34a46b429b09026a3ae16/transformed/oboe-1.10.0/prefab/modules/oboe/include/oboe/AudioStreamBuilder.h:617:58: note: passing argument to parameter 'streamCallback' here
+    AudioStreamBuilder *setCallback(AudioStreamCallback *streamCallback) {
+                                                         ^
+1 error generated.
+[2/3] Building CXX object CMakeFiles/beatlooper.dir/BeatLooperJNI.cpp.o
+ninja: build stopped: subcommand failed.

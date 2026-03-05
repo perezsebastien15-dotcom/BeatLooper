@@ -1,0 +1,21 @@
+@echo off
+"C:\\Users\\seperez1\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\cmake.exe" ^
+  "-HC:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\src\\main\\cpp" ^
+  "-DCMAKE_SYSTEM_NAME=Android" ^
+  "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" ^
+  "-DCMAKE_SYSTEM_VERSION=27" ^
+  "-DANDROID_PLATFORM=android-27" ^
+  "-DANDROID_ABI=x86_64" ^
+  "-DCMAKE_ANDROID_ARCH_ABI=x86_64" ^
+  "-DANDROID_NDK=C:\\Users\\seperez1\\AppData\\Local\\Android\\Sdk\\ndk\\25.1.8937393" ^
+  "-DCMAKE_ANDROID_NDK=C:\\Users\\seperez1\\AppData\\Local\\Android\\Sdk\\ndk\\25.1.8937393" ^
+  "-DCMAKE_TOOLCHAIN_FILE=C:\\Users\\seperez1\\AppData\\Local\\Android\\Sdk\\ndk\\25.1.8937393\\build\\cmake\\android.toolchain.cmake" ^
+  "-DCMAKE_MAKE_PROGRAM=C:\\Users\\seperez1\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe" ^
+  "-DCMAKE_CXX_FLAGS=-std=c++17" ^
+  "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\build\\intermediates\\cxx\\Debug\\2qh3ol2v\\obj\\x86_64" ^
+  "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\build\\intermediates\\cxx\\Debug\\2qh3ol2v\\obj\\x86_64" ^
+  "-DCMAKE_BUILD_TYPE=Debug" ^
+  "-DCMAKE_FIND_ROOT_PATH=C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\.cxx\\Debug\\2qh3ol2v\\prefab\\x86_64\\prefab" ^
+  "-BC:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\.cxx\\Debug\\2qh3ol2v\\x86_64" ^
+  -GNinja ^
+  "-DANDROID_STL=c++_shared"

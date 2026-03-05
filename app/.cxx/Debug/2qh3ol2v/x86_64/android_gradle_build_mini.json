@@ -1,0 +1,29 @@
+{
+  "buildFiles": [
+    "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\src\\main\\cpp\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "C:\\Users\\seperez1\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\.cxx\\Debug\\2qh3ol2v\\x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "C:\\Users\\seperez1\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\.cxx\\Debug\\2qh3ol2v\\x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "beatlooper::@6890427a1f51a3e7e1df": {
+      "artifactName": "beatlooper",
+      "abi": "x86_64",
+      "output": "C:\\Users\\seperez1\\Downloads\\BeatLooper_v4_fixed\\BeatLooper\\app\\build\\intermediates\\cxx\\Debug\\2qh3ol2v\\obj\\x86_64\\libbeatlooper.so",
+      "runtimeFiles": [
+        "C:\\Users\\seperez1\\.gradle\\caches\\transforms-3\\8ea5b5a13cb34a46b429b09026a3ae16\\transformed\\oboe-1.10.0\\prefab\\modules\\oboe\\libs\\android.x86_64\\liboboe.so"
+      ]
+    }
+  }
+}

@@ -1,0 +1,3 @@
+C:/Users/seperez1/Downloads/BeatLooper_v4_fixed/BeatLooper/app/.cxx/Debug/2qh3ol2v/x86_64/CMakeFiles/beatlooper.dir
+C:/Users/seperez1/Downloads/BeatLooper_v4_fixed/BeatLooper/app/.cxx/Debug/2qh3ol2v/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/seperez1/Downloads/BeatLooper_v4_fixed/BeatLooper/app/.cxx/Debug/2qh3ol2v/x86_64/CMakeFiles/rebuild_cache.dir
