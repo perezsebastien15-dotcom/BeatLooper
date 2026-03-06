@@ -137,3 +137,17 @@ Java_com_beatlooper_audio_OboeEngine_nativeSetPadPitch(
         JNIEnv*, jobject, jint padId, jfloat semitones) {
     if (gEngine) gEngine->setPadPitch(padId, semitones);
 }
+
+// ─── Déclenchement immédiat (FIX latence) ────────────────────────────────────
+extern "C" JNIEXPORT void JNICALL
+Java_com_beatlooper_audio_OboeEngine_nativeTriggerPadNow(
+        JNIEnv*, jobject, jint padId) {
+    if (gEngine) gEngine->triggerPadNow(padId);
+}
+
+// ─── Looper avec beats (FIX looper) ──────────────────────────────────────────
+extern "C" JNIEXPORT void JNICALL
+Java_com_beatlooper_audio_OboeEngine_nativeStartLoopRecordBeats(
+        JNIEnv*, jobject, jint beats) {
+    if (gEngine) gEngine->startLoopRecord(beats);
+}

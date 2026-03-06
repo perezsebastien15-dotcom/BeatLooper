@@ -33,8 +33,16 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val _isLoopPlaying = MutableStateFlow(false)
     val isLoopPlaying: StateFlow<Boolean> = _isLoopPlaying
 
+    // Nombre de beats sélectionné pour le looper (1, 2, 4, 8)
+    private val _loopBeats = MutableStateFlow(4)
+    val loopBeats: StateFlow<Int> = _loopBeats
+
     private val _isRecordingMic = MutableStateFlow(false)
     val isRecordingMic: StateFlow<Boolean> = _isRecordingMic
+
+    // Pad cible de l'enregistrement micro (pour le bouton flottant stop)
+    private val _micTargetPadId = MutableStateFlow<Int?>(null)
+    val micTargetPadId: StateFlow<Int?> = _micTargetPadId
 
     private val _selectedPadId = MutableStateFlow<Int?>(null)
     val selectedPadId: StateFlow<Int?> = _selectedPadId
@@ -51,55 +59,35 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val _tapCount = MutableStateFlow(0)
     val tapCount: StateFlow<Int> = _tapCount
 
-    // ── FIX BUG 1+2 : mapping label → nom de fichier res/raw ──────────────
-    // Les clés correspondent exactement aux noms des fichiers dans res/raw/
-    // (sans extension, tout en minuscules)
     private val presetSoundMap = mapOf(
-        "Kick"      to "kick",
-        "Snare"     to "snare",
-        "Hi-Hat"    to "hihat",
-        "Clap"      to "clap",
-        "Bass"      to "bass",
-        "Tom"       to "tom",
-        "Piano Do"  to "piano_c",
-        "Piano Ré"  to "piano_d"
+        "Kick"     to "kick",
+        "Snare"    to "snare",
+        "Hi-Hat"   to "hihat",
+        "Clap"     to "clap",
+        "Bass"     to "bass",
+        "Tom"      to "tom",
+        "Piano Do" to "piano_c",
+        "Piano Ré" to "piano_d"
     )
 
     init {
         oboeEngine.create()
         startBeatPoller()
-        // ── FIX BUG 1 : charger les 8 premiers sons au démarrage ──
         loadDefaultSounds()
     }
 
-    // Charge automatiquement kick, snare, hi-hat, clap sur les 4 premiers pads
-    // et les autres sons sur les suivants
     private fun loadDefaultSounds() {
         viewModelScope.launch {
-            val defaultAssignments = listOf(
-                0 to "Kick",
-                1 to "Snare",
-                2 to "Hi-Hat",
-                3 to "Clap",
-                4 to "Bass",
-                6 to "Piano Do",
-                7 to "Piano Ré"
-            )
-            defaultAssignments.forEach { (padId, label) ->
-                loadPresetByName(padId, label)
-            }
+            listOf(0 to "Kick", 1 to "Snare", 2 to "Hi-Hat", 3 to "Clap",
+                   4 to "Bass", 6 to "Piano Do", 7 to "Piano Ré")
+                .forEach { (padId, label) -> loadPresetByName(padId, label) }
         }
     }
 
-    // ── Charge un preset par son label ──────────────────────────────────────
     private suspend fun loadPresetByName(padId: Int, label: String): Boolean {
         val resName = presetSoundMap[label] ?: return false
-        // Résolution dynamique du R.raw.xxx sans dépendance à la classe R
         val resId = context.resources.getIdentifier(resName, "raw", context.packageName)
-        if (resId == 0) {
-            // Fichier absent de res/raw/ — pad désactivé silencieusement
-            return false
-        }
+        if (resId == 0) return false
         val success = oboeEngine.loadSampleFromResource(context, padId, resId)
         if (success) {
             val updated = _pads.value.toMutableList()
@@ -119,13 +107,14 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    // FIX LATENCE : triggerPadNow — immédiat, sans attendre le beat
     fun onPadTap(padId: Int) {
         val pad = _pads.value[padId]
         if (pad.soundType == SoundType.NONE) {
             _message.value = "Appuie longuement pour assigner un son"
             return
         }
-        oboeEngine.schedulePadOnNextBeat(padId)
+        oboeEngine.triggerPadNow(padId)
     }
 
     fun onPadLongPress(padId: Int) { _selectedPadId.value = padId }
@@ -138,23 +127,19 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         oboeEngine.setLooping(padId, newLoop)
     }
 
-    // ── FIX BUG 2 : assignPresetSound utilise maintenant le vrai mapping ──
     fun assignPresetSound(padId: Int, label: String, resId: Int = 0) {
         viewModelScope.launch {
             val success = loadPresetByName(padId, label)
             if (!success) {
-                // resId passé directement (fallback si besoin)
                 if (resId != 0) {
                     val ok = oboeEngine.loadSampleFromResource(context, padId, resId)
                     if (ok) {
                         val updated = _pads.value.toMutableList()
                         updated[padId] = updated[padId].copy(label = label, soundType = SoundType.PRESET)
                         _pads.value = updated
-                    } else {
-                        _message.value = "Fichier audio introuvable pour : $label"
-                    }
+                    } else _message.value = "Fichier audio introuvable : $label"
                 } else {
-                    _message.value = "Fichier audio introuvable pour : $label\n(Ajoute ${ presetSoundMap[label] }.wav dans res/raw/)"
+                    _message.value = "Ajoute ${presetSoundMap[label]}.wav dans res/raw/"
                 }
             } else {
                 _message.value = "\"$label\" assigné au pad ${padId + 1}"
@@ -169,28 +154,32 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             if (success) {
                 val updated = _pads.value.toMutableList()
                 updated[padId] = updated[padId].copy(
-                    label = "Micro", soundType = SoundType.RECORDED, soundPath = filePath
-                )
+                    label = "Micro", soundType = SoundType.RECORDED, soundPath = filePath)
                 _pads.value = updated
             }
             _selectedPadId.value = null
         }
     }
 
-    // ── FIX BUG 3 : startMicRecord / stopMicRecord corrigés ───────────────
-    fun startMicRecord() {
+    // FIX MICRO : startMicRecord mémorise le pad cible → bouton flottant visible
+    fun startMicRecord(targetPadId: Int) {
         if (_isRecordingMic.value) return
+        _micTargetPadId.value = targetPadId
+        _selectedPadId.value = null   // ferme le dialog → retour écran principal
         micRecorder.startRecording()
         _isRecordingMic.value = true
     }
 
-    fun stopMicRecord(targetPadId: Int) {
+    // Peut être appelé depuis le bouton flottant ou depuis le dialog
+    fun stopMicRecord() {
+        val targetPadId = _micTargetPadId.value ?: return
         if (!_isRecordingMic.value) return
-        // Met l'état à false immédiatement → le bouton répond instantanément
         _isRecordingMic.value = false
         viewModelScope.launch {
-            val outputFile = File(context.filesDir, "pad_${targetPadId}_${System.currentTimeMillis()}.wav")
+            val outputFile = File(context.filesDir,
+                "pad_${targetPadId}_${System.currentTimeMillis()}.wav")
             val result = micRecorder.stopRecording(outputFile)
+            _micTargetPadId.value = null
             if (result != null) {
                 assignRecordedSound(targetPadId, result.absolutePath)
                 _message.value = "Son enregistré sur le pad ${targetPadId + 1}"
@@ -216,10 +205,38 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         oboeEngine.setMetronomeEnabled(newState)
     }
 
-    fun startLoopRecord() { oboeEngine.startLoopRecord(); _isLoopRecording.value = true }
-    fun stopLoopRecord() { oboeEngine.stopLoopRecord(); _isLoopRecording.value = false; _isLoopPlaying.value = true }
-    fun stopLoop() { oboeEngine.stopLoop(); _isLoopRecording.value = false; _isLoopPlaying.value = false }
-    fun exportLoop() { _message.value = "Export en cours… (V2)" }
+    // FIX LOOPER : startLoopRecord(beats) synchronise sur le tempo
+    fun setLoopBeats(beats: Int) { _loopBeats.value = beats }
+
+    fun startLoopRecord() {
+        val beats = _loopBeats.value
+        oboeEngine.startLoopRecord(beats)
+        _isLoopRecording.value = true
+        _isLoopPlaying.value = false
+        // Auto-stop après la durée en ms
+        val bpm = bpmClock.bpm.value
+        val durationMs = ((beats * 60_000.0) / bpm).toLong()
+        viewModelScope.launch {
+            delay(durationMs + 50) // +50ms marge
+            if (_isLoopRecording.value) {
+                oboeEngine.stopLoopRecord()
+                _isLoopRecording.value = false
+                _isLoopPlaying.value = true
+            }
+        }
+    }
+
+    fun stopLoopRecord() {
+        oboeEngine.stopLoopRecord()
+        _isLoopRecording.value = false
+        _isLoopPlaying.value = true
+    }
+
+    fun stopLoop() {
+        oboeEngine.stopLoop()
+        _isLoopRecording.value = false
+        _isLoopPlaying.value = false
+    }
 
     fun setPadSpeed(padId: Int, speed: Float) {
         oboeEngine.setPadSpeed(padId, speed)
@@ -245,14 +262,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             Color(0xFF43A047), Color(0xFF7CB342), Color(0xFFC0CA33), Color(0xFFFDD835),
             Color(0xFFFFB300), Color(0xFFFB8C00), Color(0xFFE53935), Color(0xFF6D4C41)
         )
-        // Labels par défaut — seront remplacés dès que les sons sont chargés
-        val defaultLabels = listOf(
-            "Kick", "Snare", "Hi-Hat", "Clap",
-            "Bass", "Tom", "—", "Piano Do",
-            "Piano Ré", "—", "—", "—",
-            "—", "—", "—", "—"
-        )
-        return List(16) { i -> Pad(id = i, color = colors[i], label = defaultLabels[i]) }
+        val labels = listOf("Kick","Snare","Hi-Hat","Clap","Bass","Tom","—","Piano Do",
+                            "Piano Ré","—","—","—","—","—","—","—")
+        return List(16) { i -> Pad(id = i, color = colors[i], label = labels[i]) }
     }
 
     override fun onCleared() { super.onCleared(); oboeEngine.destroy() }

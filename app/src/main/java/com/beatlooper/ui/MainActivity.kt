@@ -89,9 +89,11 @@ fun BeatLooperApp(vm: MainViewModel = viewModel()) {
     val currentBeat     by vm.currentBeat.collectAsState()
     val isLoopRecording by vm.isLoopRecording.collectAsState()
     val isLoopPlaying   by vm.isLoopPlaying.collectAsState()
+    val loopBeats       by vm.loopBeats.collectAsState()
     val metronomeOn     by vm.metronomeEnabled.collectAsState()
     val selectedPadId   by vm.selectedPadId.collectAsState()
     val isRecordingMic  by vm.isRecordingMic.collectAsState()
+    val micTargetPadId  by vm.micTargetPadId.collectAsState()
     val tapCount        by vm.tapCount.collectAsState()
     val message         by vm.message.collectAsState()
 
@@ -108,12 +110,8 @@ fun BeatLooperApp(vm: MainViewModel = viewModel()) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(
-                    Brush.radialGradient(
-                        colors = listOf(Color(0xFF111111), BG),
-                        radius = 1400f
-                    )
-                )
+                .background(Brush.radialGradient(
+                    colors = listOf(Color(0xFF111111), BG), radius = 1400f))
         ) {
             Column(
                 modifier = Modifier
@@ -134,8 +132,20 @@ fun BeatLooperApp(vm: MainViewModel = viewModel()) {
                 )
                 LooperBar(
                     isRecording = isLoopRecording, isPlaying = isLoopPlaying,
+                    loopBeats = loopBeats,
+                    onSetBeats = vm::setLoopBeats,
                     onStartRec = vm::startLoopRecord, onStopRec = vm::stopLoopRecord,
-                    onStop = vm::stopLoop, onExport = vm::exportLoop
+                    onStop = vm::stopLoop, onExport = { /* vm.exportLoop() */ }
+                )
+            }
+
+            // ── Bandeau micro flottant ─────────────────────────────────────
+            // Visible dès que l'enregistrement démarre, sans avoir à rouvrir le dialog
+            if (isRecordingMic) {
+                MicRecordingBanner(
+                    padLabel = micTargetPadId?.let { "Pad ${it + 1}" } ?: "Pad",
+                    onStop = vm::stopMicRecord,
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 80.dp)
                 )
             }
         }
@@ -145,13 +155,62 @@ fun BeatLooperApp(vm: MainViewModel = viewModel()) {
         PadConfigSheet(
             pad = pads[padId], isRecordingMic = isRecordingMic,
             onAssignPreset = { label, resId -> vm.assignPresetSound(padId, label, resId) },
-            onStartMic = vm::startMicRecord,
-            onStopMic = { vm.stopMicRecord(padId) },
+            onStartMic = { vm.startMicRecord(padId) },
+            onStopMic  = vm::stopMicRecord,
             onToggleLoop = { vm.togglePadLoop(padId) },
             onSetSpeed = { vm.setPadSpeed(padId, it) },
             onSetPitch = { vm.setPadPitch(padId, it) },
             onDismiss = vm::closeDialog
         )
+    }
+}
+
+// ═══════════════════════════════════════════════════════
+// BANDEAU MICRO FLOTTANT
+// ═══════════════════════════════════════════════════════
+
+@Composable
+fun MicRecordingBanner(padLabel: String, onStop: () -> Unit, modifier: Modifier = Modifier) {
+    val infiniteTransition = rememberInfiniteTransition(label = "mic_pulse")
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = 0.6f, targetValue = 1.0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(600, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ), label = "mic_alpha"
+    )
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .background(Color(0xFF8B0000).copy(alpha = alpha))
+            .border(1.5.dp, Color(0xFFFF3333).copy(alpha = alpha), RoundedCornerShape(14.dp))
+            .pointerInput(Unit) { detectTapGestures(onTap = { onStop() }) }
+            .padding(vertical = 14.dp, horizontal = 20.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("●", color = Color(0xFFFF3333).copy(alpha = alpha), fontSize = 16.sp)
+            Text(
+                "Enregistrement $padLabel en cours",
+                color = Color.White, fontSize = 13.sp,
+                fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold
+            )
+            Spacer(Modifier.weight(1f))
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color(0xFFFF3333).copy(alpha = 0.85f))
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
+            ) {
+                Text("⏹ STOP", color = Color.White, fontSize = 11.sp,
+                    fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold)
+            }
+        }
     }
 }
 
@@ -575,20 +634,52 @@ fun PadBadge(text: String, color: Color) {
 @Composable
 fun LooperBar(
     isRecording: Boolean, isPlaying: Boolean,
+    loopBeats: Int,
+    onSetBeats: (Int) -> Unit,
     onStartRec: () -> Unit, onStopRec: () -> Unit,
     onStop: () -> Unit, onExport: () -> Unit
 ) {
-    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-        StudioBtn(
-            text = if (isRecording) "⏹  STOP REC" else "⏺  REC",
-            bg = if (isRecording) RED_BG else SURFACE,
-            modifier = Modifier.weight(1.4f), onClick = if (isRecording) onStopRec else onStartRec
-        )
-        StudioBtn(text = "■  STOP", bg = SURFACE, modifier = Modifier.weight(0.9f), onClick = onStop)
-        StudioBtn(
-            text = "💾  EXPORT", bg = if (isPlaying) GREEN_BG else SURFACE,
-            enabled = isPlaying, modifier = Modifier.weight(1.1f), onClick = onExport
-        )
+    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+        // Sélecteur de durée beats
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("LOOP :", color = LIGHT, fontSize = 9.sp,
+                fontFamily = FontFamily.Monospace,
+                modifier = Modifier.align(Alignment.CenterVertically))
+            listOf(1, 2, 4, 8).forEach { beats ->
+                val selected = loopBeats == beats
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(5.dp))
+                        .background(if (selected) CYAN.copy(0.25f) else SURFACE)
+                        .border(1.dp,
+                            if (selected) CYAN.copy(0.8f) else BORDER,
+                            RoundedCornerShape(5.dp))
+                        .pointerInput(beats) { detectTapGestures(onTap = { onSetBeats(beats) }) }
+                        .padding(horizontal = 10.dp, vertical = 5.dp)
+                ) {
+                    Text("${beats}b", color = if (selected) CYAN else LIGHT,
+                        fontSize = 9.sp, fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+            StudioBtn(
+                text = if (isRecording) "⏹  STOP REC" else "⏺  REC",
+                bg = if (isRecording) RED_BG else SURFACE,
+                modifier = Modifier.weight(1.4f),
+                onClick = if (isRecording) onStopRec else onStartRec
+            )
+            StudioBtn(text = "■  STOP", bg = SURFACE, modifier = Modifier.weight(0.9f), onClick = onStop)
+            StudioBtn(
+                text = "💾  EXPORT", bg = if (isPlaying) GREEN_BG else SURFACE,
+                enabled = isPlaying, modifier = Modifier.weight(1.1f), onClick = onExport
+            )
+        }
     }
 }
 
