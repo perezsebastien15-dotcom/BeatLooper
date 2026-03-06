@@ -4,30 +4,19 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-import java.io.RandomAccessFile
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-/**
- * Enregistre le micro et sauvegarde en fichier WAV.
- *
- * Utilisation :
- *   micRecorder.startRecording()
- *   ...
- *   val wavFile = micRecorder.stopRecording()
- */
 class MicRecorder {
 
     private val TAG = "MicRecorder"
 
     companion object {
-        const val SAMPLE_RATE = 44100       // Hz
+        const val SAMPLE_RATE = 44100
         const val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
         const val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
     }
@@ -36,92 +25,101 @@ class MicRecorder {
         .coerceAtLeast(4096)
 
     private var audioRecord: AudioRecord? = null
-    private var recordingJob: Job? = null
     private val pcmData = mutableListOf<Short>()
-    private var isRecording = false
 
-    /**
-     * Démarre l'enregistrement micro en coroutine.
-     * Permission RECORD_AUDIO requise avant l'appel.
-     */
+    // ── FIX BUG 3 : volatile pour visibilité inter-thread ──
+    @Volatile private var isRecording = false
+
     fun startRecording() {
         if (isRecording) return
         pcmData.clear()
 
         audioRecord = AudioRecord(
             MediaRecorder.AudioSource.MIC,
-            SAMPLE_RATE,
-            CHANNEL_CONFIG,
-            AUDIO_FORMAT,
-            bufferSize
+            SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT, bufferSize
         )
 
         if (audioRecord?.state != AudioRecord.STATE_INITIALIZED) {
             Log.e(TAG, "AudioRecord non initialisé")
+            audioRecord?.release()
+            audioRecord = null
             return
         }
 
         isRecording = true
         audioRecord?.startRecording()
 
-        recordingJob = CoroutineScope(Dispatchers.IO).launch {
+        // ── FIX : thread dédié au lieu d'une coroutine ──
+        // Évite le problème de join() bloquant sur Dispatchers.IO
+        Thread {
             val buffer = ShortArray(bufferSize / 2)
+            Log.d(TAG, "Thread micro démarré")
             while (isRecording) {
                 val read = audioRecord?.read(buffer, 0, buffer.size) ?: 0
-                if (read > 0) {
-                    pcmData.addAll(buffer.take(read))
+                if (read > 0) synchronized(pcmData) {
+                    buffer.take(read).forEach { pcmData.add(it) }
                 }
             }
+            Log.d(TAG, "Thread micro terminé — ${pcmData.size} samples capturés")
+        }.apply { isDaemon = true; start() }
+    }
+
+    // ── FIX BUG 3 : stopRecording n'est plus suspend, pas de join() ──
+    // On arrête le flag → le thread s'arrête seul au prochain cycle
+    // On attend max 500ms que les derniers samples arrivent
+    suspend fun stopRecording(outputFile: File): File? {
+        if (!isRecording) {
+            Log.w(TAG, "stopRecording appelé sans enregistrement actif")
+            return null
+        }
+
+        // Signale l'arrêt
+        isRecording = false
+
+        // Laisse le thread terminer son dernier buffer (max 200ms)
+        withContext(Dispatchers.IO) {
+            Thread.sleep(200)
+            audioRecord?.stop()
+            audioRecord?.release()
+            audioRecord = null
+        }
+
+        val pcmSnapshot = synchronized(pcmData) { pcmData.toShortArray() }
+        if (pcmSnapshot.isEmpty()) {
+            Log.w(TAG, "Aucun sample enregistré")
+            return null
+        }
+
+        return withContext(Dispatchers.IO) {
+            writeWavFile(outputFile, pcmSnapshot)
         }
     }
 
-    /**
-     * Arrête l'enregistrement et retourne le fichier WAV généré.
-     * @param outputFile Fichier de destination
-     */
-    suspend fun stopRecording(outputFile: File): File? {
-        if (!isRecording) return null
-        isRecording = false
-        recordingJob?.join()
-        audioRecord?.stop()
-        audioRecord?.release()
-        audioRecord = null
-
-        return writeWavFile(outputFile, pcmData.toShortArray())
-    }
-
-    /**
-     * Écrit un fichier WAV à partir des samples PCM.
-     * Format WAV = header RIFF 44 octets + data PCM
-     */
     private fun writeWavFile(file: File, pcm: ShortArray): File {
-        val dataSize = pcm.size * 2 // 2 octets par sample (16 bits)
+        val dataSize = pcm.size * 2
         FileOutputStream(file).use { fos ->
-            // --- Header RIFF ---
             fos.write(riffHeader(dataSize))
-            // --- Données PCM ---
             val byteBuffer = ByteBuffer.allocate(dataSize).order(ByteOrder.LITTLE_ENDIAN)
             pcm.forEach { byteBuffer.putShort(it) }
             fos.write(byteBuffer.array())
         }
-        Log.d(TAG, "WAV écrit : ${file.absolutePath} (${dataSize / 1024} Ko)")
+        Log.d(TAG, "WAV : ${file.absolutePath} (${dataSize / 1024} Ko)")
         return file
     }
 
     private fun riffHeader(dataSize: Int): ByteArray {
-        val totalSize = dataSize + 36
         val buf = ByteBuffer.allocate(44).order(ByteOrder.LITTLE_ENDIAN)
         buf.put("RIFF".toByteArray())
-        buf.putInt(totalSize)
+        buf.putInt(dataSize + 36)
         buf.put("WAVE".toByteArray())
         buf.put("fmt ".toByteArray())
-        buf.putInt(16)           // Taille du chunk fmt
-        buf.putShort(1)          // PCM = 1
-        buf.putShort(1)          // Mono = 1
+        buf.putInt(16)
+        buf.putShort(1)
+        buf.putShort(1)
         buf.putInt(SAMPLE_RATE)
-        buf.putInt(SAMPLE_RATE * 2)  // ByteRate = SampleRate * NumChannels * BitsPerSample/8
-        buf.putShort(2)          // BlockAlign
-        buf.putShort(16)         // BitsPerSample
+        buf.putInt(SAMPLE_RATE * 2)
+        buf.putShort(2)
+        buf.putShort(16)
         buf.put("data".toByteArray())
         buf.putInt(dataSize)
         return buf.array()

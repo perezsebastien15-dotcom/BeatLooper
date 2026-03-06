@@ -21,7 +21,7 @@ bool AudioEngine::start() {
            ->setFormat(oboe::AudioFormat::Float)
            ->setChannelCount(oboe::ChannelCount::Stereo)
            ->setSampleRate(SAMPLE_RATE)
-           ->setCallback(this);
+           ->setDataCallback(this);
 
     oboe::Result result = builder.openManagedStream(mStream);
     if (result != oboe::Result::OK) {

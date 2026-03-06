@@ -1,18 +1,21 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    // Nouveau plugin Compose Compiler (obligatoire depuis Kotlin 2.0)
     id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 android {
     namespace 'com.beatlooper'
-    compileSdk 34
+    compileSdk 35
+    ndkVersion "29.0.14206865"
 
     defaultConfig {
         applicationId "com.beatlooper"
         minSdk 27
-        targetSdk 34
-        versionCode 3
-        versionName "3.0"
+        targetSdk 35
+        versionCode 4
+        versionName "4.0"
 
         externalNativeBuild {
             cmake {
@@ -39,18 +42,23 @@ android {
         prefab true
     }
 
+    // Plus besoin de kotlinCompilerExtensionVersion avec Kotlin 2.0+
+    // Le plugin org.jetbrains.kotlin.plugin.compose gère ça automatiquement
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    kotlinOptions { jvmTarget = '17' }
 }
 
 dependencies {
     // Oboe (audio basse latence)
     implementation 'com.google.oboe:oboe:1.8.0'
 
-    // Compose BOM
-    implementation platform('androidx.compose:compose-bom:2024.01.00')
+    // Compose BOM 2024.11 — compatible Kotlin 2.0
+    implementation platform('androidx.compose:compose-bom:2024.11.00')
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
@@ -59,12 +67,12 @@ dependencies {
     implementation 'androidx.compose.animation:animation-core'
 
     // Activity + ViewModel
-    implementation 'androidx.activity:activity-compose:1.8.2'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
+    implementation 'androidx.activity:activity-compose:1.9.3'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0'
 
     debugImplementation 'androidx.compose.ui:ui-tooling'
 }

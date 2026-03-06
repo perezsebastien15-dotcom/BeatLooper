@@ -27,7 +27,7 @@ struct PadVoice {
     }
 };
 
-class AudioEngine : public oboe::AudioStreamCallback {
+class AudioEngine : public oboe::AudioStreamDataCallback {
 public:
     AudioEngine();
     ~AudioEngine();
